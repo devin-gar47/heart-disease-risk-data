@@ -16,27 +16,85 @@
     <script src="csv/test-data.csv.js"></script>
     <script src="csv/heart-data.csv.js"></script>
     <script src="graph-creation-functions/barchart.js"></script>
+    <script src="graph-creation-functions/scatter-plot.js"></script>
+    <script src="graph-creation-functions/stacked-bar-chart.js"></script>
+    <script src="graph-creation-functions/histogram.js"></script>
+    <style>
+      svg {
+        font: 10px sans-serif;
+      }
+
+      a:hover tspan:first-child {
+        text-decoration: underline;
+      }
+
+      tspan:last-child {
+        font-size: 9px;
+        fill-opacity: 0.7;
+      }
+    </style>
+    <script>
+      function handleInteractivity() {
+        highlightDots(
+          document.getElementById("form").elements[0].value,
+          document.getElementById("form").elements[1].value,
+          document.getElementById("form").elements[2].value
+        );
+        // highlightBar(document.getElementById('form').elements[1].value, document.getElementById('form').elements[2].value)
+      }
+    </script>
   </head>
   <body>
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-4">
-          <form>
+          <h3>Heart Disease Data Analysis</h3>
+          <p>
+            Heart Disease is oe of the most common forms of disease. Fill out
+            the form and find out how you compare to others in our data pool to
+            see if you potentially are at risk of heart disease
+          </p>
+          <form id="form" onsubmit="return false">
             <div class="mb-3">
               <label for="exampleInputEmail1" class="form-label">Age</label>
-              <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+              <input type="text" class="form-control" id="age-input" />
             </div>
             <div class="mb-3">
               <label for="exampleInputPassword1" class="form-label">Sex</label>
-              <input type="password" class="form-control" id="exampleInputPassword1">
+                <select class="form-select" aria-label="Default select example">
+                  <option value="M" selected>M</option>
+                  <option value="F">F</option>
+                </select>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <div class="mb-3">
+              <label for="exampleInputPassword1" class="form-label"
+                >Chest Pain Type</label
+              >
+              <!-- ATA,NAP,ASY,TA -->
+              <select class="form-select" aria-label="Default select example">
+                <option value="TA" selected>TA</option>
+                <option value="ASY">ASY</option>
+                <option value="NAP">NAP</option>
+                <option value="ATA">ATA</option>
+              </select>
+            </div>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              onclick="handleInteractivity()"
+            >
+              Submit
+            </button>
           </form>
         </div>
         <div class="col-md-8">
           <div class="row">
-            <div class="col-md-6" id="my_dataviz"></div>
-            <div class="col-md-6" id="heart-rate-stacked-chart"></div>
+            <div class="col-md-6" id="scatter-plot-graph"></div>
+            <div class="col-md-6" id="heart-rate-bar-chart"></div>
+          </div>
+          <div class="row">
+            <div class="col-md-6" id="stacked-bar-chart"></div>
+            <div class="col-md-6" id="histogram-chart"></div>
           </div>
         </div>
       </div>
@@ -44,10 +102,18 @@
   </body>
 
   <script>
-    const testChartData = d3.csvParse(testCSVData, (d) => d);
+    const barChartObj = createBarChartObj();
+    const stackedBarChartObj = createStackedBarChartObj();
+    const histogramObj = createHistogramObj();
+
     const heartRateChartData = d3.csvParse(heartRateData, (d) => d);
-    // createBarChart(testChartData, "#my_dataviz");
-    createBarChart(heartRateChartData, "#my_dataviz");
+    createScatterPlotGraph(heartRateChartData, "#scatter-plot-graph");
+    barChartObj.createBarChart(heartRateChartData, "#heart-rate-bar-chart");
+    stackedBarChartObj.createStackedBarChart(
+      heartRateChartData,
+      "#stacked-bar-chart"
+    );
+    histogramObj.createHistogramChart(heartRateChartData, "#histogram-chart");
   </script>
   <script
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
