@@ -27,7 +27,7 @@ function createHistogramObj() {
 
         const ageArr = Array.from(myMap.keys());
         const heartDiseaseCount = Array.from(myMap.values());
-        console.log(heartDiseaseCount)
+        console.log(heartDiseaseCount);
 
         let ageStr = ``;
         ageArr.forEach(
@@ -40,6 +40,34 @@ ${ageStr}
         return finalCSVString;
       }
       const data = d3.csvParse(createCSV(), (d) => d);
+
+      var tooltip = d3
+        .select(idTag)
+        .append("div")
+        .style("opacity", 0)
+        .attr("class", "tooltip")
+        .style("background-color", "black")
+        .style("color", "white")
+        .style("border-radius", "5px")
+        .style("padding", "10px");
+
+      var showTooltip = function (d) {
+        tooltip.transition().duration(100).style("opacity", 1);
+        tooltip
+          .html(`Age: ${d[0]?.Age}`)
+          .style("left", d3.mouse(this)[0] + 520 + "px")
+          .style("top", d3.mouse(this)[1] + "px");
+      };
+      var moveTooltip = function (d) {
+          console.log(d3.mouse(this))
+        tooltip
+          .style("left", d3.mouse(this)[0] + 1220 + "px")
+          .style("top", d3.mouse(this)[1] + 500 + "px");
+      };
+      // A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
+      var hideTooltip = function (d) {
+        tooltip.transition().duration(100).style("opacity", 0);
+      };
 
       // X axis: scale and draw:
       var x = d3.scaleLinear().domain([0, 100]).range([0, width]);
@@ -81,16 +109,18 @@ ${ageStr}
           return height - y(d.length);
         })
         .attr("class", function (d) {
-            console.log(d)
-            return `hist-bar age-${d[0]?.Age || 0}`
-          })
+          return `hist-bar age-${d[0]?.Age || 0}`;
+        })
         .style("fill", function (d) {
           if (d.x0 < 140) {
             return "green";
           } else {
             return "yellow";
           }
-        });
+        })
+        .on("mouseover", showTooltip)
+        .on("mousemove", moveTooltip)
+        .on("mouseleave", hideTooltip);
 
       //implementing an Append function  of a vertical line to highlight the separation
       svg

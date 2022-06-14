@@ -102,6 +102,36 @@ F,${chestPainTypeArr
       // Highlight a specific subgroup when hovered
       // ----------------
 
+      var tooltip = d3
+        .select(idTag)
+        .append("div")
+        .style("opacity", 0)
+        .attr("class", "tooltip")
+        .style("background-color", "white")
+        .style("border", "solid")
+        .style("border-width", "1px")
+        .style("border-radius", "5px")
+        .style("padding", "10px");
+
+      // Three function that change the tooltip when user hover / move / leave a cell
+      var mouseover = function (d) {
+        var subgroupName = d3.select(this.parentNode).datum().key;
+        var subgroupValue = d.data[subgroupName];
+        tooltip
+          .html(
+            "subgroup: " + subgroupName + "<br>" + "Value: " + subgroupValue
+          )
+          .style("opacity", 1);
+      };
+      var mousemove = function (d) {
+        tooltip
+          .style("left", d3.mouse(this)[0] + 720 + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
+          .style("top", d3.mouse(this)[1] + 350 + "px");
+      };
+      var mouseleave = function (d) {
+        tooltip.style("opacity", 0);
+      };
+
       // Show the bars
       svg
         .append("g")
@@ -134,12 +164,17 @@ F,${chestPainTypeArr
         })
         .attr("width", x.bandwidth())
         .attr("stroke", "grey")
+        .on("mouseover", mouseover)
+        .on("mousemove", mousemove)
+        .on("mouseleave", mouseleave);
     },
   };
   return stackedBarChartObj;
 }
 
 function highlightBar(sex, chestPainType) {
-    d3.selectAll(".myRect rect").style("opacity", 0.2);
-    d3.selectAll(`.${chestPainType} > rect:nth-child(${sex === 'M' ? '1' : '2'})`).style("opacity", 1);
-  }
+  d3.selectAll(".myRect rect").style("opacity", 0.2);
+  d3.selectAll(
+    `.${chestPainType} > rect:nth-child(${sex === "M" ? "1" : "2"})`
+  ).style("opacity", 1);
+}
