@@ -61,8 +61,8 @@ ${ageStr}
       var moveTooltip = function (d) {
           console.log(d3.mouse(this))
         tooltip
-          .style("left", d3.mouse(this)[0] + 1220 + "px")
-          .style("top", d3.mouse(this)[1] + 500 + "px");
+          .style("left", d3.mouse(this)[0] + 1420 + "px")
+          .style("top", d3.mouse(this)[1] + 680 + "px");
       };
       // A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
       var hideTooltip = function (d) {

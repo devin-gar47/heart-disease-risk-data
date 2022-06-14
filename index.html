@@ -46,7 +46,7 @@
   </head>
   <body>
     <div class="container-fluid">
-      <div class="row">
+      <div class="row mt-5">
         <div class="col-md-4">
           <h3>Heart Disease Data Analysis</h3>
           <p>
@@ -89,12 +89,21 @@
         </div>
         <div class="col-md-8">
           <div class="row">
-            <div class="col-md-6" id="scatter-plot-graph"></div>
-            <div class="col-md-6" id="heart-rate-bar-chart"></div>
+            <div class="col-md-6 text-center" id="scatter-plot-graph">
+              <p>Age vs Cholesterol</p>
+            </div>
+            <div class="col-md-6 text-center" id="heart-rate-bar-chart">
+              <p>Heart Disease Count vs Sex</p>
+            </div>
           </div>
           <div class="row">
-            <div class="col-md-6" id="stacked-bar-chart"></div>
-            <div class="col-md-6" id="histogram-chart"></div>
+            <div class="col-md-6 text-center" id="stacked-bar-chart">
+              <p class="m-0">Heart Disease Count vs Sex</p>
+              <small>(Categorized by Chest Pain Type)</small>
+            </div>
+            <div class="col-md-6 text-center" id="histogram-chart">
+              <p>Heart Disease Count vs Age Group</p>
+            </div>
           </div>
         </div>
       </div>
